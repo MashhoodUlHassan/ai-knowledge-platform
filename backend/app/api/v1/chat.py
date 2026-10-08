@@ -1,9 +1,14 @@
+import json
+import logging
+
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-import json
 
 from app.agents.graph import agent_graph
+
+
+logger = logging.getLogger(__name__)
 
 
 router = APIRouter(
@@ -27,6 +32,8 @@ def chat(request: ChatRequest):
             }
         )
 
+        logger.info("Chat request completed successfully")
+
         return {
             "status": "success",
             "message": request.message,
@@ -35,16 +42,20 @@ def chat(request: ChatRequest):
         }
 
     except ValueError as exc:
+        logger.warning("Chat request validation failed: %s", exc)
+
         raise HTTPException(
             status_code=400,
             detail=str(exc),
-        )
+        ) from exc
 
-    except Exception as exc:
+    except Exception:
+        logger.exception("Chat request failed")
+
         raise HTTPException(
             status_code=500,
-            detail=str(exc),
-        )
+            detail="Unable to process your request. Please try again later.",
+        ) from None
 
 
 @router.post("/stream")
@@ -59,6 +70,8 @@ def chat_stream(request: ChatRequest):
                 }
             )
 
+            logger.info("Streaming chat request completed successfully")
+
             data = {
                 "status": "success",
                 "message": request.message,
@@ -68,10 +81,25 @@ def chat_stream(request: ChatRequest):
 
             yield f"data: {json.dumps(data)}\n\n"
 
-        except Exception as exc:
+        except ValueError as exc:
+            logger.warning(
+                "Streaming chat validation failed: %s",
+                exc,
+            )
+
             error = {
                 "status": "error",
                 "detail": str(exc),
+            }
+
+            yield f"data: {json.dumps(error)}\n\n"
+
+        except Exception:
+            logger.exception("Streaming chat request failed")
+
+            error = {
+                "status": "error",
+                "detail": "Unable to process your request. Please try again later.",
             }
 
             yield f"data: {json.dumps(error)}\n\n"
