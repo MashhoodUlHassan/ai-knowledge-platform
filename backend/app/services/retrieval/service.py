@@ -1,3 +1,5 @@
+import logging
+
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 
 from app.infra.qdrant.client import client
@@ -5,13 +7,27 @@ from app.infra.qdrant.service import COLLECTION_NAME
 from app.services.embedding.service import generate_embedding
 
 
+logger = logging.getLogger(__name__)
+
+
 def search_similar_chunks(
     query: str,
     document_id: int | None = None,
     top_k: int = 5,
 ) -> list[dict]:
-    if not query.strip():
+    query = query.strip()
+
+    if not query:
         raise ValueError("Query cannot be empty.")
+
+    if top_k < 1 or top_k > 20:
+        raise ValueError("top_k must be between 1 and 20.")
+
+    logger.info(
+        "Starting vector retrieval: document_id=%s, top_k=%s",
+        document_id,
+        top_k,
+    )
 
     query_embedding = generate_embedding(query)
 
@@ -34,6 +50,11 @@ def search_similar_chunks(
         limit=top_k,
         with_payload=True,
     ).points
+
+    logger.info(
+        "Vector retrieval completed: results=%s",
+        len(results),
+    )
 
     return [
         {
