@@ -25,3 +25,4 @@ python-docx
 pytest
 pytest-asyncio
 httpx
+ragas
