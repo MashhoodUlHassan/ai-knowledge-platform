@@ -1,9 +1,15 @@
+import logging
+
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.graph import END, START, StateGraph
+
 from app.agents.guardrails import validate_query
 from app.agents.state import AgentState
 from app.agents.tools import retrieve_documents
 from app.core.settings import settings
+
+
+logger = logging.getLogger(__name__)
 
 
 llm = ChatGoogleGenerativeAI(
@@ -16,8 +22,15 @@ llm = ChatGoogleGenerativeAI(
 def retrieve_node(state: AgentState) -> AgentState:
     query = validate_query(state["query"])
 
+    logger.info("Agent retrieval started")
+
     results = retrieve_documents.invoke(
         {"query": query}
+    )
+
+    logger.info(
+        "Agent retrieval completed: results=%s",
+        len(results),
     )
 
     return {
@@ -55,7 +68,17 @@ Context:
 {context}
 """
 
-    response = llm.invoke(prompt)
+    logger.info(
+        "Generating AI answer: context_sources=%s",
+        len(state["retrieved_context"]),
+    )
+
+    try:
+        response = llm.invoke(prompt)
+
+    except Exception:
+        logger.exception("LLM answer generation failed")
+        raise
 
     if isinstance(response.content, str):
         answer = response.content
@@ -70,6 +93,11 @@ Context:
 
     else:
         answer = str(response.content)
+
+    logger.info(
+        "AI answer generated successfully: answer_length=%s",
+        len(answer),
+    )
 
     return {
         **state,
