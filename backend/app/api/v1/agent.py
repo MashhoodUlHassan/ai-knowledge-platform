@@ -1,15 +1,10 @@
-from fastapi import APIRouter, HTTPException
+﻿from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-
 from app.agents.graph import agent_graph
-
+from app.services.retrieval.citations import format_citations
 router = APIRouter(prefix="/agent", tags=["Agent"])
-
-
 class AgentRequest(BaseModel):
     query: str
-
-
 @router.post("/ask")
 def ask_agent(request: AgentRequest):
     try:
@@ -20,22 +15,19 @@ def ask_agent(request: AgentRequest):
                 "answer": "",
             }
         )
-
         return {
             "status": "success",
             "query": request.query,
             "answer": result["answer"],
-            "sources": result["retrieved_context"],
+            "sources": format_citations(result["retrieved_context"]),
         }
-
     except ValueError as exc:
         raise HTTPException(
             status_code=400,
             detail=str(exc),
         ) from exc
-
-    except Exception as exc:
+    except Exception:
         raise HTTPException(
             status_code=500,
-            detail=f"Agent failed: {str(exc)}",
-        ) from exc
+            detail="Unable to process your request. Please try again later.",
+        ) from None

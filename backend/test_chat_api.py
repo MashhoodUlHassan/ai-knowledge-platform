@@ -1,13 +1,7 @@
-from unittest.mock import patch
-
+﻿from unittest.mock import patch
 from fastapi.testclient import TestClient
-
 from app.main import app
-
-
 client = TestClient(app)
-
-
 def test_chat_api_success():
     mock_result = {
         "answer": "Artificial intelligence is the field of building intelligent systems.",
@@ -21,7 +15,6 @@ def test_chat_api_success():
             }
         ],
     }
-
     with patch(
         "app.api.v1.chat.agent_graph.invoke",
         return_value=mock_result,
@@ -30,21 +23,22 @@ def test_chat_api_success():
             "/chat",
             json={"message": "What is artificial intelligence?"},
         )
-
     assert response.status_code == 200
-
     data = response.json()
-
     assert data["status"] == "success"
     assert data["message"] == "What is artificial intelligence?"
     assert data["answer"] == mock_result["answer"]
-    assert data["sources"] == mock_result["retrieved_context"]
-
-
+    assert len(data["sources"]) == 1
+    source = data["sources"][0]
+    assert source["source"] == "Source 1"
+    assert source["document_id"] == 1
+    assert source["score"] == 0.95
+    assert source["text"] == mock_result["retrieved_context"][0]["text"]
+    assert len(source["chunks"]) == 1
+    assert source["chunks"][0]["chunk_index"] == 0
 def test_chat_api_empty_message():
     response = client.post(
         "/chat",
         json={"message": ""},
     )
-
     assert response.status_code == 400

@@ -1,131 +1,81 @@
-# AI Knowledge Platform
+﻿# AI Knowledge Platform
 
-An AI-powered knowledge platform that combines **Retrieval-Augmented Generation (RAG)**, **vector search**, **LangGraph agents**, and **Google Gemini** to answer questions from uploaded documents with source-aware responses.
+An AI-powered document question-answering platform built with **FastAPI, React, Retrieval-Augmented Generation (RAG), Qdrant, LangGraph, and Google Gemini**. Upload documents, ask questions about their content, and retrieve relevant passages with source citations.
 
-## 🚀 Features
+## Features
 
-- 📄 Document upload and processing
-- ✂️ Automatic text parsing and chunking
-- 🧠 Embedding generation
-- 🔎 Semantic vector search with Qdrant
-- 🤖 Retrieval-Augmented Generation (RAG)
-- 🕸️ LangGraph-based AI agent workflow
-- 💬 Chat API with Server-Sent Events (SSE)
-- 🗄️ PostgreSQL database
-- ⚡ Redis-based background processing
-- 🔐 Environment-based configuration
-- 🛡️ Basic query guardrails
-- 🧪 Automated backend tests
-- 📊 RAGAS evaluation pipeline
-- 🐳 Docker deployment support
-- 🌐 Frontend interface
+- **Document Upload:** Upload TXT, PDF, and DOCX documents.
+- **Document Processing:** Extract text, split content into chunks, and prepare it for retrieval.
+- **Semantic Search:** Find relevant document passages using embeddings and Qdrant.
+- **Retrieval-Augmented Generation:** Generate answers using retrieved document context.
+- **Source Citations:** Return source information alongside retrieval results.
+- **AI Agent:** Integrate agent workflows with LangGraph and Google Gemini.
+- **Chat API:** Provide chat and streaming-chat endpoints.
+- **Voice Features:** API endpoints for speech transcription and text-to-speech.
+- **Database Integration:** PostgreSQL and SQLAlchemy.
+- **Automated Tests:** Backend tests using pytest.
+- **Web Interface:** Frontend built with React and Vite.
 
-## 🏗️ Architecture
+> Note: Available features depend on the current configuration of the backend, external services, and AI provider.
+
+## Technology Stack
+
+| Area | Technologies |
+|---|---|
+| Backend | Python 3.11, FastAPI, Pydantic Settings |
+| Database | PostgreSQL, SQLAlchemy, Alembic |
+| AI / LLM | Google Gemini, LangChain, LangGraph |
+| RAG | Embeddings, document chunking, semantic retrieval |
+| Vector Database | Qdrant |
+| Background Processing | Redis, Celery |
+| Frontend | React, JavaScript, Vite |
+| API Communication | REST, Server-Sent Events (SSE) |
+| Testing | pytest |
+| Version Control | Git, GitHub |
+
+## Architecture
 
 ```text
-                    ┌─────────────────────┐
-                    │      Frontend       │
-                    │      Web App        │
-                    └──────────┬──────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │      FastAPI        │
-                    │       Backend       │
-                    └──────────┬──────────┘
-                               │
-              ┌────────────────┼────────────────┐
-              │                │                │
-              ▼                ▼                ▼
-        ┌───────────┐    ┌───────────┐    ┌───────────┐
-        │ PostgreSQL│    │   Qdrant  │    │   Redis   │
-        │  Database │    │Vector DB  │    │   Queue   │
-        └───────────┘    └───────────┘    └─────┬─────┘
-                                                │
-                                                ▼
-                                         ┌─────────────┐
-                                         │   Workers   │
-                                         └─────────────┘
-
-                         User Question
-                               │
-                               ▼
-                         Query Validation
-                               │
-                               ▼
-                         Vector Retrieval
-                               │
-                               ▼
-                           Qdrant
-                               │
-                               ▼
-                       Relevant Context
-                               │
-                               ▼
-                         LangGraph Agent
-                               │
-                               ▼
-                         Google Gemini
-                               │
-                               ▼
-                      Grounded AI Answer
-                               │
-                               ▼
-                          Citations
+User
+ |
+ v
+React Frontend
+ |
+ v
+FastAPI Backend
+ |
+ +---- Document Upload and Processing
+ |              |
+ |              v
+ |        Text Extraction
+ |              |
+ |              v
+ |        Chunking and Embeddings
+ |              |
+ |              v
+ |            Qdrant
+ |
+ +---- User Question
+                |
+                v
+         Semantic Retrieval
+                |
+                v
+         Relevant Context
+                |
+                v
+        LangGraph / Gemini
+                |
+                v
+       Answer and Citations
 ```
 
-## 🛠️ Technology Stack
+PostgreSQL stores application data. Redis and Celery are intended for background processing where configured.
 
-### Backend
-
-- Python 3.11
-- FastAPI
-- Pydantic Settings
-- SQLAlchemy
-- Alembic
-- PostgreSQL
-
-### AI / ML
-
-- Google Gemini
-- LangChain
-- LangGraph
-- Retrieval-Augmented Generation (RAG)
-- Text Embeddings
-- Semantic Search
-
-### Vector Database
-
-- Qdrant
-
-### Background Processing
-
-- Redis
-- Celery
-
-### Frontend
-
-- JavaScript
-- Vite
-- Web-based chat interface
-- Server-Sent Events (SSE)
-
-### Testing & Evaluation
-
-- Pytest
-- RAGAS
-
-### DevOps
-
-- Docker
-- Git
-- GitHub
-
-## 📁 Project Structure
+## Project Structure
 
 ```text
 ai-knowledge-platform/
-│
 ├── backend/
 │   ├── app/
 │   │   ├── agents/
@@ -135,85 +85,95 @@ ai-knowledge-platform/
 │   │   ├── infra/
 │   │   ├── models/
 │   │   ├── services/
-│   │   ├── workers/
 │   │   └── main.py
-│   │
 │   ├── evaluation/
-│   │   ├── dataset.py
-│   │   └── run_evaluation.py
-│   │
-│   └── test_*.py
-│
+│   └── tests
 ├── frontend/
-│
-├── docs/
-│   └── eval-report.md
-│
-├── Dockerfile
+│   └── src/
 ├── requirements.txt
+├── requirements-dev.txt
 ├── .env.example
 ├── .gitignore
 └── README.md
 ```
 
-## ⚙️ Local Setup
+The exact files and folders may vary as development continues.
+
+## Prerequisites
+
+Install the following before running the project:
+
+- Python 3.11
+- Node.js and npm
+- Git
+- PostgreSQL, if enabled in your configuration
+- A Qdrant instance or local Qdrant storage
+- Google Gemini API key
+
+Redis is required if the configured application workflows use Redis or Celery.
+
+## Local Setup
 
 ### 1. Clone the repository
 
-```bash
+```powershell
 git clone https://github.com/MashhoodUlHassan/ai-knowledge-platform.git
 cd ai-knowledge-platform
 ```
 
-### 2. Create a virtual environment
-
-Windows PowerShell:
+### 2. Create and activate a Python environment
 
 ```powershell
 python -m venv .venv
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+### 3. Install backend dependencies
 
 ```powershell
 python -m pip install -r requirements.txt
 ```
 
-### 4. Configure environment variables
-
-Create a `.env` file based on:
-
-```text
-.env.example
-```
-
-Add the required database, Redis, Qdrant, and Gemini configuration.
-
-> Never commit your `.env` file or API keys to GitHub.
-
-## ▶️ Run the Backend
-
-From the project root:
+Install development dependencies separately if needed:
 
 ```powershell
-$env:PYTHONPATH="backend"
+python -m pip install -r requirements-dev.txt
+```
+
+### 4. Configure environment variables
+
+Create a local `.env` file using `.env.example` as a reference.
+
+Configure the values required by your application, such as:
+
+- Google Gemini API key
+- Database connection string
+- Qdrant connection settings
+- Redis settings, if required
+- Frontend allowed origins and application configuration
+
+Never commit `.env` files, credentials, or API keys to GitHub.
+
+### 5. Start the backend
+
+From the repository root, open a PowerShell terminal:
+
+```powershell
+$env:PYTHONPATH = "backend"
 python -m uvicorn app.main:app --reload
 ```
 
-Backend:
+The local API should be available at:
 
-```text
-http://127.0.0.1:8000
-```
+- API: `http://127.0.0.1:8000`
+- Swagger documentation: `http://127.0.0.1:8000/docs`
+- Health check: `http://127.0.0.1:8000/api/v1/health`
 
-API documentation:
+Keep the backend terminal running.
 
-```text
-http://127.0.0.1:8000/docs
-```
+### 6. Start the frontend
 
-## 🌐 Run the Frontend
+Open another PowerShell terminal:
 
 ```powershell
 cd frontend
@@ -221,212 +181,100 @@ npm install
 npm run dev
 ```
 
-Frontend:
+Open the local frontend URL printed by Vite, commonly `http://localhost:5173`.
 
-```text
-http://localhost:5173
-```
+Ensure the frontend API configuration points to the running backend.
 
-## 🧪 Run Tests
+## API Overview
 
-From the project root:
+The following endpoints are available in the current application. Refer to Swagger for their exact request schemas and response formats.
 
-```powershell
-$env:PYTHONPATH="backend"
-python -m pytest -q
-```
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/` | Root endpoint |
+| GET | `/api/v1/health` | Health check |
+| POST | `/api/v1/documents/upload` | Upload a document |
+| POST | `/api/v1/retrieval/search` | Search relevant document passages |
+| POST | `/api/v1/agent/ask` | Submit a question to the AI agent |
+| POST | `/chat` | Chat API |
+| POST | `/chat/stream` | Streaming chat API |
+| POST | `/api/v1/voice/transcribe` | Speech transcription |
+| POST | `/api/v1/voice/synthesize` | Text-to-speech |
 
-Current automated test suite covers:
+Some endpoints require configured external services or API credentials.
 
-- API health endpoint
-- Chat API
-- Chat validation
-- Retrieval validation
-- Guardrails
-- Document processing
+## RAG Workflow
 
-## 📊 Evaluation
+1. Upload a supported document.
+2. Extract text from the file.
+3. Split the text into chunks.
+4. Generate embeddings.
+5. Store vectors for semantic retrieval.
+6. Search for relevant passages when a question is asked.
+7. Pass retrieved context to the configured AI workflow.
+8. Return the answer and available source citations.
 
-The project includes a RAGAS-based evaluation pipeline.
+## Testing
 
-Evaluation metrics include:
-
-- **Faithfulness**
-- **Answer Relevancy**
-- **Context Precision**
-- **Context Recall**
-
-Evaluation dataset and execution code are located in:
-
-```text
-backend/evaluation/
-```
-
-Detailed evaluation documentation:
-
-```text
-docs/eval-report.md
-```
-
-Run evaluation with:
+Run backend tests from the repository root:
 
 ```powershell
-$env:PYTHONPATH="backend"
-python backend\evaluation\run_evaluation.py
+python -m pytest backend -q
 ```
 
-> Final numerical RAGAS scores may vary depending on LLM/API availability and model response behavior.
+The test environment must have the required dependencies and services configured. If local Qdrant storage is in use, avoid opening the same storage directory from multiple processes simultaneously.
 
-## 🐳 Docker
+Build the frontend for production:
 
-Build the backend image:
-
-```bash
-docker build -t ai-knowledge-platform .
+```powershell
+cd frontend
+npm run build
 ```
 
-Run the container:
+## Deployment
 
-```bash
-docker run -p 8000:8000 ai-knowledge-platform
-```
+The project is intended to be deployed without Docker.
 
-## 🔌 API Overview
+Deployment requires a frontend host, a backend host, environment variables, and appropriately configured database and vector storage services.
 
-### Health / Root
+Before deployment:
 
-```http
-GET /
-```
+- Configure the production frontend API URL.
+- Set the backend's allowed frontend origins.
+- Add secrets through the hosting provider's environment settings.
+- Configure persistent or managed PostgreSQL and Qdrant storage.
+- Verify all required AI provider credentials and service connections.
+- Test document upload, retrieval, chat, and citations using the live URLs.
 
-### Chat
+**Deployment status:** Hosting configuration and live production verification are pending.
 
-```http
-POST /chat
-```
+## Security Notes
 
-Example:
+- Do not expose API keys in frontend code.
+- Do not commit `.env` files or private credentials.
+- Use production-specific environment variables.
+- Restrict allowed origins to the deployed frontend.
+- Protect uploaded documents and database credentials.
 
-```json
-{
-  "message": "What is machine learning?"
-}
-```
+## Future Improvements
 
-### Streaming Chat
+- Authentication and user-specific document access
+- Improved retrieval quality and reranking
+- More robust streaming responses
+- Better evaluation and observability
+- Production monitoring and error handling
+- Further voice feature testing
+- Deployment automation
 
-```http
-POST /chat/stream
-```
-
-### Document APIs
-
-```text
-/api/v1/documents
-```
-
-### Retrieval
-
-```http
-POST /api/v1/retrieval/search
-```
-
-Example:
-
-```json
-{
-  "query": "What is artificial intelligence?",
-  "top_k": 5
-}
-```
-
-## 🔄 RAG Pipeline
-
-The platform follows this workflow:
-
-```text
-Document Upload
-      ↓
-Document Parsing
-      ↓
-Text Chunking
-      ↓
-Embedding Generation
-      ↓
-Qdrant Vector Storage
-      ↓
-User Question
-      ↓
-Query Embedding
-      ↓
-Semantic Retrieval
-      ↓
-Relevant Context
-      ↓
-LangGraph Agent
-      ↓
-Google Gemini
-      ↓
-Grounded Answer
-      ↓
-Source References
-```
-
-## 🛡️ Guardrails
-
-The platform validates incoming queries before processing.
-
-Current guardrails include:
-
-- Empty-query rejection
-- Context-grounded answering
-- Explicit fallback when information is unavailable
-- Source-aware responses
-
-## 📈 Future Improvements
-
-Planned improvements include:
-
-- True token-level streaming
-- Authentication and authorization
-- Advanced document formats
-- Improved citation handling
-- Hybrid search
-- Reranking
-- Conversation memory
-- Advanced evaluation datasets
-- Better observability and tracing
-- Production CI/CD
-- Cloud deployment
-- Performance optimization
-- Improved agent tool selection
-
-## 🎯 Project Goals
-
-This project was designed to demonstrate practical experience with:
-
-- Production-style FastAPI architecture
-- RAG system development
-- Vector databases
-- LLM integration
-- Agentic AI
-- LangGraph
-- Background processing
-- Automated testing
-- AI evaluation
-- Docker
-- API design
-- Full-stack AI application development
-
-## 👨‍💻 Author
+## Author
 
 **Muhammad Mashhood Ul Hassan**
 
 BS Computer Science  
-AI / ML | Generative AI | Agentic AI | RAG
+Interests: AI / ML, Generative AI, Agentic AI, RAG, and backend development.
 
-GitHub: `MashhoodUlHassan`
+GitHub: [MashhoodUlHassan](https://github.com/MashhoodUlHassan)
 
-## 📄 License
+## License
 
-This project is intended for educational, portfolio, and demonstration purposes.
+For educational, portfolio, and demonstration purposes. Add a formal license file if you intend to distribute the project under a specific open-source license.

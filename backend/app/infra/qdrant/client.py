@@ -1,8 +1,5 @@
-from qdrant_client import QdrantClient
-
-
-QDRANT_URL = "http://localhost:6333"
-
+﻿from qdrant_client import QdrantClient
+QDRANT_PATH = "backend/app/storage/qdrant"
 client = QdrantClient(
-    url=QDRANT_URL,
+    path=QDRANT_PATH,
 )

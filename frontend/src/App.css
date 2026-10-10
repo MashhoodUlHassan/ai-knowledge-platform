@@ -395,4 +395,73 @@ input {
 .thinking {
   color: #6366f1 !important;
   font-style: italic;
+}/* Retrieved source text previews */
+.source-preview {
+  margin: 6px 0 4px;
+  padding: 8px 10px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #4b5563;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.source div {
+  min-width: 0;
+  flex: 1;
+}
+.source small {
+  display: block;
+}
+/* Chat message layout refinements */
+.message-row.user .message-content > strong {
+  display: none;
+}
+.markdown-content {
+  margin-top: 7px;
+  color: #374151;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.markdown-content p {
+  margin: 0 0 10px;
+  white-space: normal;
+}
+.markdown-content ul,
+.markdown-content ol {
+  margin: 8px 0 12px;
+  padding-left: 24px;
+}
+.markdown-content li {
+  margin: 4px 0;
+}
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  margin: 14px 0 7px;
+  line-height: 1.4;
+}
+.markdown-content pre {
+  padding: 12px;
+  overflow-x: auto;
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+.markdown-content code {
+  overflow-wrap: anywhere;
+}
+.source-preview {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 100px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+.source-details {
+  min-width: 0;
+  flex: 1;
 }

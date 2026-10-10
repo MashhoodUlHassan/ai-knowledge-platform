@@ -1,6 +1,35 @@
+# Environment variables and secrets
 .env
+.env.*
+!.env.example
+
+# Python cache and virtual environments
 __pycache__/
-*.pyc
+*.py[cod]
 .venv/
 venv/
+
+# Local application data
 backend/app/storage/
+
+# Frontend dependencies and build
+node_modules/
+frontend/node_modules/
+frontend/dist/
+dist/
+
+# Temporary backups
+*.backup
+*.backup-*
+*.bak
+
+# Local test artifacts
+test_document.txt
+test_document.pdf
+test_document.docx
+test_tts.wav
+
+# Test outputs
+.pytest_cache/
+.coverage
+htmlcov/
