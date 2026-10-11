@@ -278,3 +278,7 @@ GitHub: [MashhoodUlHassan](https://github.com/MashhoodUlHassan)
 ## License
 
 For educational, portfolio, and demonstration purposes. Add a formal license file if you intend to distribute the project under a specific open-source license.
+
+## Project Screenshot
+
+![AI Knowledge Platform Screenshot](screenshot.jpeg)
