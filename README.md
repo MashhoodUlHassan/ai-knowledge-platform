@@ -274,7 +274,7 @@ BS Computer Science
 Interests: AI / ML, Generative AI, Agentic AI, RAG, and backend development.
 
 GitHub: [MashhoodUlHassan](https://github.com/MashhoodUlHassan)
-Linkedin: [Muhammad Mashhood Ul Hassan]([https://github.com/MashhoodUlHassan](https://www.linkedin.com/in/muhammad-mashhood-ul-hassan-986b06365/))
+Linkedin: [Muhammad Mashhood Ul Hassan](https://www.linkedin.com/in/muhammad-mashhood-ul-hassan-986b06365/)
 
  ## License
 
