@@ -258,7 +258,7 @@ Before deployment:
 
 ## Future Improvements
 
-- Authentication and user-specific document access
+- Authentication and user specific document access
 - Improved retrieval quality and reranking
 - More robust streaming responses
 - Better evaluation and observability
