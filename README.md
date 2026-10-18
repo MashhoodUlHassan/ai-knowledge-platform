@@ -1,6 +1,6 @@
 ﻿# AI Knowledge Platform
 
-An AI-powered document question-answering platform built with **FastAPI, React, Retrieval-Augmented Generation (RAG), Qdrant, LangGraph, and Google Gemini**. Upload documents, ask questions about their content, and retrieve relevant passages with source citations.
+An AI powered document question-answering platform built with **FastAPI, React, Retrieval Augmented Generation (RAG), Qdrant, LangGraph, and Google Gemini**. Upload documents, ask questions about their content, and retrieve relevant passages with source citations.
 
 ## Features
 
